@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Tickets</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f6f8;
+    }
+
+    .navbar {
+      background: #2c3e50;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+    }
+
+    .container {
+      padding: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .status {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .priority {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .badge {
+      padding: 3px 8px;
+      border-radius: 5px;
+      color: white;
+      font-size: 12px;
+    }
+
+    .P0 { background: red; }
+    .P1 { background: orange; }
+    .P2 { background: blue; }
+    .P3 { background: gray; }
+
+    .open { color: green; }
+    .in_progress { color: orange; }
+    .resolved { color: blue; }
+    .closed { color: gray; }
+
+    .sla {
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="navbar">
+    Smart Support Desk
+  </div>
+
+  <div class="container">
+
+    <h2>My Tickets</h2>
+
+    <div class="grid">
+
+      <% tickets.forEach(t => { %>
+
+        <div class="card" onclick="window.location='/tickets/<%= t.id %>'">
+
+          <div class="title"><%= t.title %></div>
+
+          <div class="status">
+            Status:
+            <span class="<%= t.status %>"><%= t.status %></span>
+          </div>
+
+          <div class="priority">
+            Priority:
+            <span class="badge <%= t.priority %>"><%= t.priority %></span>
+          </div>
+
+          <div class="sla">
+            SLA: <%= t.sla_status || 'N/A' %>
+          </div>
+
+        </div>
+
+      <% }) %>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

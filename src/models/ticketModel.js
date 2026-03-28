@@ -28,3 +28,16 @@ export const createTicketDB = (data) => {
         );
     });
 };
+
+export const getUserTickets = (user_id) => {
+    return new Promise ((resolve, reject) => {
+        const sql = `
+          SELECT * FROM tickets WHERE user_id = ?
+          ORDER BY created_at DESC
+        `;
+        db.query(sql, [user_id], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};

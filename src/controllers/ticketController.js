@@ -59,3 +59,49 @@ export const createTicket = async (req, res) => {
   }
 
 };
+
+export const getTickets = async (req, res) => {
+  try {
+    const user_id = req.session.user.id;
+
+    const tickets = await getUserTickets(user_id);
+
+    const now = new Date();
+
+    tickets.forEach(t => {
+      const due = new Date(t.sla_due_time);
+      const diff = due - now;
+
+      const hours = Math.floor(Math.abs(diff) / (1000 * 60 * 60));
+
+      if (diff > 0) {
+        t.sla_status = `${hours} hrs left`;
+
+        if (hours <= 2) {
+          t.sla_flag = "critical";
+        } else if (hours <= 6) {
+          t.sla_flag = "warning";
+        } else {
+          t.sla_flag = "normal";
+        }
+
+      } else {
+        t.sla_status = `Overdue by ${hours} hrs`;
+        t.sla_flag = "overdue";
+      }
+    });
+
+    // sort by priority (P0 first)
+    const priorityOrder = { P0: 0, P1: 1, P2: 2, P3: 3 };
+
+    tickets.sort((a, b) => {
+      return priorityOrder[a.priority] - priorityOrder[b.priority];
+    });
+
+    res.render("users/ticketList", { tickets });
+
+  } catch (err) {
+    console.log(err);
+    res.send("Error loading tickets");
+  }
+};
