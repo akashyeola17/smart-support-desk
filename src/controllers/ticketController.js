@@ -105,3 +105,26 @@ export const getTickets = async (req, res) => {
     res.send("Error loading tickets");
   }
 };
+
+export const getTicketDetails = async (req,res) => {
+  try {
+    const ticketId = req.params.id;
+    console.log("Fetching details for ticket ID:", ticketId);
+    const ticket = await getTicketById(ticketId);
+    console.log("Ticket details:", ticket);
+
+     if (!ticket) {
+      return res.send("Ticket not found");
+    }
+    const comments = await getCommentsByTicket(ticketId);
+
+    res.render("users/ticketDetails", {
+      ticket, 
+      comments,
+      user: req.session.user
+    });
+  } catch (error) {
+      console.log(error);
+      res.send("Error loading ticket");
+  }
+};

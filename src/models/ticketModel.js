@@ -41,3 +41,16 @@ export const getUserTickets = (user_id) => {
         });
     });
 };
+
+export const getTicketById = (id) => {
+    return new Promise((resolve, reject) => {
+        const sql = `SELECT * FROM tickets WHERE id = ?`;
+
+        db.query(sql, [id], (err, result) => {
+            if (err) return reject(err);
+            console.log("DB Result: ", result);
+            resolve(result[0]);
+        });
+    });
+};
+
