@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: linear-gradient(135deg, #3498db, #2c3e50);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px;
+      width: 350px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #2980b9;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: gray;
+      margin-bottom: 20px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <div class="title">Smart Support Desk</div>
+    <div class="subtitle">Login to continue</div>
+
+    <form action="/login" method="POST">
+
+      <input type="email" name="email" placeholder="Enter Email" required>
+
+      <input type="password" name="password" placeholder="Enter Password" required>
+
+      <button class="btn" type="submit">Login</button>
+
+    </form>
+
+  </div>
+
+</body>
+</html>
