@@ -129,6 +129,26 @@ export const getTicketDetails = async (req,res) => {
   }
 };
 
+export const addComment = async (req,res) => {
+  try {
+    const ticketId = req.params.id;
+    const {message} = req.body;
+    const user_id = req.session.user.id; //temp user
+
+    await addCommentDB(ticketId, user_id, message);
+
+    await createEvent(
+      ticketId,
+      "COMMENT_ADDED",
+      "A new comment was added to the ticket"
+    );
+    res.redirect(`/tickets/${ticketId}`);
+  } catch (error) {
+    console.log("COMMENT ERROR:", error);
+    res.send("Error adding comment");
+  }
+}
+
 export const getAdminTickets = async (req, res) => {
   try {
 
@@ -190,5 +210,61 @@ export const adminDashboard = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.send("Error loading dashboard");
+  }
+};
+
+export const updateStatus = async (req, res) => {
+  try {
+
+    const ticketId = req.params.id;
+    const { status } = req.body;
+
+    console.log("ticketId:", ticketId);
+    console.log("status:", status);
+
+    const ticket = await getTicketById(ticketId);
+    console.log("ticket:", ticket);
+
+    if (!ticket) {
+      return res.send("Ticket not found");
+    }
+
+    const currentStatus = ticket.status;
+
+    const allowedTransitions = {
+      open: ["in_progress"],
+      in_progress: ["resolved"],
+      resolved: ["closed", "open"],
+      closed: ["open"]
+    };
+
+    console.log("currentStatus:", currentStatus);
+
+    if (!allowedTransitions[currentStatus]?.includes(status)) {
+      return res.send(`Invalid transition from ${currentStatus} → ${status}`);
+    }
+
+    await new Promise((resolve, reject) => {
+      db.query(
+        "UPDATE tickets SET status = ? WHERE id = ?",
+        [status, ticketId],
+        (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        }
+      );
+    });
+
+    await createEvent(
+      ticketId,
+      "STATUS_CHANGED",
+      `Status changed from ${currentStatus} to ${status}`
+    );
+
+    res.redirect(`/tickets/${ticketId}`);
+
+  } catch (err) {
+    console.log("STATUS ERROR:", err); // 👈 IMPORTANT
+    res.send("Error updating status");
   }
 };
