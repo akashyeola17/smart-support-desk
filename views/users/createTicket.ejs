@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Ticket</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      margin: 0;
+    }
+
+    .navbar {
+      background: #2c3e50;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .form-box {
+      background: white;
+      padding: 30px;
+      width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background: #2980b9;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="navbar">
+    Smart Support Desk
+  </div>
+
+  <div class="container">
+
+    <div class="form-box">
+
+      <h2>Create Ticket</h2>
+
+      <form action="/tickets/create" method="POST">
+
+        <label>Title</label>
+        <input type="text" name="title" required>
+
+        <label>Description</label>
+        <textarea name="description" required></textarea>
+
+        <label>Category</label>
+        <select name="category">
+          <option value="bug">Bug</option>
+          <option value="feature">Feature</option>
+          <option value="billing">Billing</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label>Impact</label>
+        <select name="impact">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <label>Urgency</label>
+        <select name="urgency">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <button class="btn" type="submit">Submit Ticket</button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

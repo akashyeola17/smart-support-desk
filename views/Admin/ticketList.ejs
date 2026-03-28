@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tickets</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f6f8;
+    }
+
+    .navbar {
+      background: #2c3e50;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+    }
+
+    .container {
+      padding: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* Priority */
+    .badge {
+      padding: 3px 8px;
+      border-radius: 5px;
+      color: white;
+      font-size: 12px;
+    }
+
+    .P0 { background: red; }
+    .P1 { background: orange; }
+    .P2 { background: blue; }
+    .P3 { background: gray; }
+
+    /* SLA */
+    .sla.normal { color: green; }
+    .sla.warning { color: orange; font-weight: bold; }
+    .sla.critical { color: red; font-weight: bold; }
+    .sla.overdue { color: darkred; font-weight: bold; }
+
+    .card.critical { border-left: 5px solid red; }
+    .card.warning { border-left: 5px solid orange; }
+    .card.overdue { border-left: 5px solid darkred; }
+
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">My Tickets</div>
+
+<div class="container">
+
+
+  <div class="grid">
+
+    <% tickets.forEach(t => { %>
+
+      <div class="card <%= t.sla_flag %>" onclick="window.location='/tickets/<%= t.id %>'">
+
+        <div class="title"><%= t.title %></div>
+
+        <div>Status: <%= t.status %></div>
+
+        <div>
+          Priority:
+          <span class="badge <%= t.priority %>"><%= t.priority %></span>
+        </div>
+
+        <% if (t.priority === 'P0') { %>
+          <div style="color:red; font-weight:bold;">🔥 Immediate Attention</div>
+        <% } %>
+
+        <div class="sla <%= t.sla_flag %>">
+          SLA: <%= t.sla_status %>
+        </div>
+
+      </div>
+
+    <% }) %>
+
+  </div>
+
+</div>
+
+</body>
+</html>

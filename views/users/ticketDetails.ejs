@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ticket Details</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f6f8;
+    }
+
+    .navbar {
+      background: #2c3e50;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+    }
+
+    .container {
+      width: 60%;
+      margin: 30px auto;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .chat-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      height: 300px;
+      overflow-y: auto;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+
+    .user {
+      background: #3498db;
+      color: white;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .admin {
+      background: #ecf0f1;
+      color: black;
+      margin-right: auto;
+    }
+
+    .form-box {
+      margin-top: 15px;
+    }
+
+    textarea, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      height: 70px;
+    }
+
+    select {
+      height: auto;
+      margin-top: 10px;
+    }
+
+    .btn {
+      margin-top: 10px;
+      padding: 10px;
+      background: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #27ae60;
+    }
+
+    .status-box {
+      margin-top: 20px;
+    }
+
+    .status-btn {
+      background: #e67e22;
+    }
+
+    .status-btn:hover {
+      background: #d35400;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="navbar">
+    Smart Support Desk
+  </div>
+
+  <div class="container">
+
+    <!-- Ticket Info -->
+    <div class="card">
+      <h2><%= ticket.title %></h2>
+      <p><strong>Description:</strong> <%= ticket.description %></p>
+      <p><strong>Status:</strong> <%= ticket.status %></p>
+      <p><strong>Priority:</strong> <%= ticket.priority %></p>
+    </div>
+
+    <!-- Chat -->
+    <div class="chat-box">
+
+      <% comments.forEach(c => { %>
+
+        <div class="message <%= c.author_id === user.id ? 'user' : 'admin' %>">
+          <strong><%= c.name %>:</strong><br>
+          <%= c.message %>
+        </div>
+
+      <% }) %>
+
+    </div>
+
+    <!-- Add Comment -->
+    <div class="form-box">
+      <form action="/tickets/<%= ticket.id %>/comment" method="POST">
+        <textarea name="message" placeholder="Type your message..." required></textarea>
+        <button class="btn" type="submit">Send</button>
+      </form>
+    </div>
+
+    <!-- ✅ ADMIN ONLY STATUS UPDATE -->
+    <% if (user.role === 'admin') { %>
+
+      <div class="card status-box">
+        <h3>Update Status</h3>
+
+        <form action="/tickets/<%= ticket.id %>/status" method="POST">
+
+          <select name="status" required>
+
+            <option value="open" <%= ticket.status === 'open' ? 'selected' : '' %>>Open</option>
+            <option value="in_progress" <%= ticket.status === 'in_progress' ? 'selected' : '' %>>In Progress</option>
+            <option value="resolved" <%= ticket.status === 'resolved' ? 'selected' : '' %>>Resolved</option>
+            <option value="closed" <%= ticket.status === 'closed' ? 'selected' : '' %>>Closed</option>
+
+          </select>
+
+          <button class="btn status-btn" type="submit">
+            Update Status
+          </button>
+
+        </form>
+
+      </div>
+
+    <% } %>
+
+  </div>
+
+</body>
+</html>
