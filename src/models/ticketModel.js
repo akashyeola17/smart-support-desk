@@ -54,3 +54,18 @@ export const getTicketById = (id) => {
     });
 };
 
+// For Admin
+export const getAllTickets = () => {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT t.*, u.name
+            FROM tickets t
+            JOIN users u ON t.user_id = u.id
+            ORDER BY t.created_at DESC
+        `;
+        db.query(sql, (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
+};

@@ -128,3 +128,36 @@ export const getTicketDetails = async (req,res) => {
       res.send("Error loading ticket");
   }
 };
+
+export const getAdminTickets = async (req, res) => {
+  try {
+
+    const tickets = await getAllTickets();
+
+    const now = new Date();
+
+    tickets.forEach(t => {
+      const due = new Date(t.sla_due_time);
+      const diff = due - now;
+
+      const hours = Math.floor(Math.abs(diff) / (1000 * 60 * 60));
+
+      if (diff > 0) {
+        t.sla_status = `${hours} hrs left`;
+
+        if (hours <= 2) t.sla_flag = "critical";
+        else if (hours <= 6) t.sla_flag = "warning";
+        else t.sla_flag = "normal";
+
+      } else {
+        t.sla_status = `Overdue by ${hours} hrs`;
+        t.sla_flag = "overdue";
+      }
+    });
+
+    res.render("admin/ticketList", { tickets });
+
+  } catch (err) {
+    res.send("Error loading admin tickets");
+  }
+};
