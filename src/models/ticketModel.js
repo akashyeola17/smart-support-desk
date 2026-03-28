@@ -69,3 +69,29 @@ export const getAllTickets = () => {
         });
     });
 };
+
+export const getDashboardStats = () => {
+  return new Promise((resolve, reject) => {
+
+    Promise.all([
+      new Promise((res, rej) => {
+        db.query("SELECT COUNT(*) AS count FROM tickets", (e, r) => e ? rej(e) : res(r[0].count));
+      }),
+      new Promise((res, rej) => {
+        db.query("SELECT COUNT(*) AS count FROM tickets WHERE priority IN ('P0','P1')", (e, r) => e ? rej(e) : res(r[0].count));
+      }),
+      new Promise((res, rej) => {
+        db.query("SELECT COUNT(*) AS count FROM tickets WHERE reopen_count > 0", (e, r) => e ? rej(e) : res(r[0].count));
+      }),
+      new Promise((res, rej) => {
+        db.query("SELECT COUNT(*) AS count FROM tickets WHERE status = 'open'", (e, r) => e ? rej(e) : res(r[0].count));
+      })
+    ])
+    .then(([total, highPriority, reopened, open]) => {
+      resolve({ total, highPriority, reopened, open });
+    })
+    .catch(reject);
+
+  });
+};
+

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f6f8;
+    }
+
+    .navbar {
+      background: #2c3e50;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+    }
+
+    .container {
+      padding: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      margin: 10px 0;
+      font-size: 28px;
+    }
+
+    .card p {
+      color: gray;
+    }
+
+    .red { border-top: 5px solid red; }
+    .orange { border-top: 5px solid orange; }
+    .blue { border-top: 5px solid blue; }
+    .green { border-top: 5px solid green; }
+
+    .recent {
+      margin-top: 30px;
+    }
+
+    .ticket {
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* 🔥 BUTTON STYLE */
+    .btn {
+      margin-top: 25px;
+      padding: 12px 20px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn:hover {
+      background: #2980b9;
+    }
+
+    .btn-container {
+      text-align: center;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="navbar">
+    Admin Dashboard
+  </div>
+
+  <div class="container">
+
+    <!-- Stats -->
+    <div class="grid">
+
+      <div class="card blue">
+        <p>Total Tickets</p>
+        <h2><%= stats.total %></h2>
+      </div>
+
+      <div class="card red">
+        <p>High Priority</p>
+        <h2><%= stats.highPriority %></h2>
+      </div>
+
+      <div class="card orange">
+        <p>Reopened</p>
+        <h2><%= stats.reopened %></h2>
+      </div>
+
+      <div class="card green">
+        <p>Open Tickets</p>
+        <h2><%= stats.open %></h2>
+      </div>
+
+    </div>
+
+    <!-- ✅ BUTTON ADDED HERE -->
+    <div class="btn-container">
+      <button class="btn" onclick="window.location='/tickets/admin/list'">
+        View All Tickets
+      </button>
+    </div>
+
+    <!-- Recent Tickets -->
+    <div class="recent">
+      <h3>Recent Tickets</h3>
+
+      <% tickets.forEach(t => { %>
+        <div class="ticket" onclick="window.location='/tickets/<%= t.id %>'">
+          <strong><%= t.title %></strong><br>
+          Status: <%= t.status %> | Priority: <%= t.priority %>
+        </div>
+      <% }) %>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
