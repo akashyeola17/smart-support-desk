@@ -161,3 +161,17 @@ export const getAdminTickets = async (req, res) => {
     res.send("Error loading admin tickets");
   }
 };
+
+export const userHome = async (req,res) => {
+  try {
+    const user = req.session.user;
+    const tickets = await getUserTickets(user.id);
+
+    res.render("users/home", {
+      user,
+      tickets: tickets.slice(0,5)
+    });
+  } catch (error) {
+    res.send("Error loading user home");
+  }
+}
